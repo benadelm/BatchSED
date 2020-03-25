@@ -62,7 +62,7 @@ As substring edit distance computations require multiple iterations over one of 
 
 # Output
 
-The output file is a UTF-8 plain text file with every line corresponding to one pair of input files from the comparison plan. The lines contain the follwing fields, separated by tabulator characters (U+0009):
+The output file is a UTF-8 plain text file with every line corresponding to one pair of input files from the comparison plan. The lines contain the following fields, separated by tabulator characters (U+0009):
 
 1. index of the first input file
 2. index of the second input file
