@@ -25,6 +25,10 @@ The program expects three positional command-line arguments:
 2. base path for resolving filenames (absolute or relative to the working directory)
 3. path to the output file (absolute or relative to the working directory)
 
+Dummy example:
+
+	comparison-plan.txt the/corpus/directory output.txt
+
 ## Comparison Plan
 
 The comparison plan input file is a UTF-8 plain text file with two sections, separated by an empty line.
@@ -52,11 +56,11 @@ Input text files are UTF-8 plain text files with one token per line. Empty lines
 
 If the output file already exists, the program reads from it for which pairs the substring edit distances have already been computed. Processing of the comparison plan then skips those pairs.
 
-The running time of the program is dominated by the duration of the substring edit distance computations, which can be time-consuming. Computing the substring edit distance between a sequence of length *m* and a sequence of length *n* takes time more or less proportional to the product *m* · *n*. For example, the time needed to compute the substring edit distance between a sequence of 1000 items and a sequence of 200 items (*m* · *n* = 200000) is approximately a hundred times longer than the time needed for a sequence of 100 items and a sequence of 20 items (*m* · *n* = 2000). This allows for a relatively precise projection of the time it will take to compute substring edit distances for all the text pairs in a comparison plan. For example, on a 2.2 GHz Intel Xeon CPU E5-2630 v4 a running time estimate for for *m* · *n* = 2000 was 0.031 ms and thus 3.1 ms for *m* · *n* = 200000; comparing two novels the size of George Orwell’s *1984* (≈ 125000 words) would take four minutes on that processor.
+The running time of the program is dominated by the duration of the substring edit distance computations, which can be time-consuming. Computing the substring edit distance between a sequence of length *m* and a sequence of length *n* takes time more or less proportional to the product *m* · *n*. For example, the time needed to compute the substring edit distance between a sequence of 1000 items and a sequence of 200 items (*m* · *n* = 200000) is approximately a hundred times longer than the time needed for a sequence of 100 items and a sequence of 20 items (*m* · *n* = 2000). This allows for a relatively precise projection of the time it will take to compute substring edit distances for all the text pairs in a comparison plan. For example, on a 2.2 GHz Intel Xeon CPU E5-2630 v4 a running time estimate for *m* · *n* = 2000 was 0.031 ms and thus 3.1 ms for *m* · *n* = 200000; comparing two novels the size of George Orwell’s *1984* (≈ 125000 words) would take four minutes on that processor.
 
 To speed up the running time, the program processes different pairs in parallel, trying to make use of all available processors (or processor cores). That is, the substring edit distances for a single pair of texts are still computed sequentially, but two pairs of texts can be processed concurrently at the same time. If the number of text pairs to compare is much larger than the number of available processors, this can speed up the computation by a factor approximately equal to the number of processors. For example, when comparing significantly more than four text pairs on a four-core processor, the running time is reduced by approximately factor four.
 
-As substring edit distance computations require multiple iterations over one of the two sequences to compare, the token sequences are fully read into memory before computing substring edit distances. If you are running the program on a machine with many cores or have extraordinarily long texts, increasing Java’s heap size (with the `-Xmx` option) can be advisable:
+As substring edit distance computations require multiple iterations over one of the two sequences to compare, the token sequences are fully read into memory before computing substring edit distances. If you are running the program on a machine with many cores or have extraordinarily long texts, increasing Java’s heap size (with the `-Xmx` option, see [Java options](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/java.html)) can be advisable:
 
 	java -Xmx10g -jar ...
 
